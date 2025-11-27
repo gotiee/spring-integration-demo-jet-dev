@@ -13,7 +13,8 @@ import java.util.List;
 public class IntegrationConfig {
 
     private static final List<String> CHANNEL_NAMES = List.of(
-            "tmp"
+            "transformUser",
+            "enrichCountry"
     );
 
     @Bean

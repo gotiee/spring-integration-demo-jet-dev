@@ -9,6 +9,7 @@ import org.springframework.integration.file.dsl.Files;
 
 import java.io.File;
 import java.util.UUID;
+import java.util.concurrent.Executors;
 
 @Slf4j
 @Configuration
@@ -29,10 +30,11 @@ public class CsvFileIntegrationFlow {
                     return fields.length >= 3 && fields[2].contains("@");
                 })
                 .enrichHeaders(h -> h.headerFunction("correlationId", m -> UUID.randomUUID().toString()))
-                .handle(m -> {
-                    log.info("Correlation ID: {}", m.getHeaders().get("correlationId"));
-                    log.info("Processing file line: {}", m.getPayload());
-                })
+                .log(m -> "Received CSV line: " + m.getPayload())
+                .publishSubscribeChannel(Executors.newCachedThreadPool(), s -> s
+                        .subscribe(f -> f.channel("transformUser"))
+                        .subscribe(f -> f.channel("enrichCountry"))
+                )
                 .get();
     }
 
