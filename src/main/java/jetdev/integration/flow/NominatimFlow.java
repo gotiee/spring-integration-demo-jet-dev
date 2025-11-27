@@ -1,5 +1,6 @@
 package jetdev.integration.flow;
 
+import jetdev.integration.model.Nominatim;
 import jetdev.integration.service.NominatimService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +21,10 @@ public class NominatimFlow {
                 .handle(Map.class, (m, headers) ->
                         nominatimService.fetchLonLatFromCityAndCountry((String) m.get("city"), (String) m.get("country"))
                 )
+                .transform(Nominatim.class, n -> Map.of(
+                        "lat", n.getLat(),
+                        "lon", n.getLon()
+                ))
                 .log(m -> "Nominatim response: " + m.getPayload())
                 .channel("openMeteo")
                 .get();
