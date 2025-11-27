@@ -23,8 +23,8 @@ public class OpenMeteoFlow {
                 )
                 .transform(OpenMeteo.class, m ->
                         Map.<String, Object>of(
-                                "temperature_2m", m.getHourly().getTemperature().getLast(),
-                                "relative_humidity_2m", m.getHourly().getHumidity().getLast()
+                                "temperature", m.getHourly().getTemperature().getLast(),
+                                "humidity", m.getHourly().getHumidity().getLast()
                         )
                 )
                 .log(m -> "OpenMeteoFlow received message: " + m.getPayload())

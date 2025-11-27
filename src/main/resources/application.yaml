@@ -1,9 +1,19 @@
 spring:
   application:
     name: integration
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.JsonSerializer
+      retries: 3
+      batch-size: 16384
+      buffer-memory: 33554432
+
 
 demo:
   apis:
     nominatim: https://nominatim.openstreetmap.org/
     restcountries: https://restcountries.com/v3.1/
     openmeteo: https://api.open-meteo.com/v1/
+
