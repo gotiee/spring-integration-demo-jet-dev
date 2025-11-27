@@ -22,9 +22,13 @@ public class CsvFileIntegrationFlow {
                         c -> c.poller(Pollers.fixedDelay(1000).maxMessagesPerPoll(1))
                 )
                 .split(Files.splitter())
+                .filter(m -> {
+                    String line = (String) m;
+                    String[] fields = line.split(",");
+                    return fields.length >= 3 && fields[2].contains("@");
+                })
                 .handle(m -> log.info("Processing file line: {}", m.getPayload()))
                 .get();
-
     }
 
 }
