@@ -5,6 +5,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.dsl.IntegrationFlow;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Slf4j
 @Configuration
 public class EnrichCountryFlow {
@@ -12,7 +15,21 @@ public class EnrichCountryFlow {
     public IntegrationFlow enrichCountryFlowProcess() {
         return IntegrationFlow
                 .from("enrichCountry")
-                .log(m -> "Enriching country data for: " + m.getPayload())
+                .transform(m -> {
+                    String line = (String) m;
+                    String[] fields = line.split(",");
+                    Map<String, String> userMap = new HashMap<>();
+                    userMap.put("ville", fields[3].trim());
+                    userMap.put("pays", fields[4].trim());
+                    return userMap;
+                })
+                .transform(Map.class, userMap -> {
+                    Map<String, String> userCityCountryMap = new HashMap<>();
+                    userCityCountryMap.put("city", (String) userMap.get("ville"));
+                    userCityCountryMap.put("country", (String) userMap.get("pays"));
+                    return userCityCountryMap;
+                })
+                .log(m -> "Enriched user with country: " + m.getPayload())
                 .channel("nullChannel")
                 .get();
     }
