@@ -28,7 +28,7 @@ public class OpenMeteoFlow {
                         )
                 )
                 .log(m -> "OpenMeteoFlow received message: " + m.getPayload())
-                .channel("nullChannel")
+                .channel("aggregateWeatherCountry")
                 .get();
     }
 }

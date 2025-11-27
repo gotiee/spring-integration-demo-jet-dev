@@ -17,7 +17,8 @@ public class IntegrationConfig {
             "enrichCountry",
             "aggregateUserAndCountry",
             "nominatim",
-            "openMeteo"
+            "openMeteo",
+            "aggregateWeatherCountry"
     );
 
     @Bean
