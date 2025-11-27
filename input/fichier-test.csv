@@ -1,3 +1,4 @@
 Nom,Prénom,Email,Ville,Pays
 Dupont,Jean,jean@dupont.fr,Paris,France
-Martin,Marie,marie@martin.fr,Lyon,France
+Martin,Marie,email-invalide,Lyon,France
+Durand,Paul,paul@durand.fr,Marseille,France
