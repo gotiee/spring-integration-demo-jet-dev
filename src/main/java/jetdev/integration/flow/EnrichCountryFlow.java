@@ -7,6 +7,7 @@ import org.springframework.integration.dsl.IntegrationFlow;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executors;
 
 @Slf4j
 @Configuration
@@ -30,7 +31,9 @@ public class EnrichCountryFlow {
                     return userCityCountryMap;
                 })
                 .log(m -> "Enriched user with country: " + m.getPayload())
-                .channel("nullChannel")
+                .publishSubscribeChannel(Executors.newCachedThreadPool(), s -> s
+                        .subscribe(f -> f.channel("nominatim"))
+                )
                 .get();
     }
 }

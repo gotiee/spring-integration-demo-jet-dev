@@ -15,7 +15,8 @@ public class IntegrationConfig {
     private static final List<String> CHANNEL_NAMES = List.of(
             "transformUser",
             "enrichCountry",
-            "aggregateUserAndCountry"
+            "aggregateUserAndCountry",
+            "nominatim"
     );
 
     @Bean

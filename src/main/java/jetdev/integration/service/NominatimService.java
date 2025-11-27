@@ -1,7 +1,6 @@
 package jetdev.integration.service;
 
 import jetdev.integration.model.Nominatim;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +14,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequiredArgsConstructor
 @Slf4j
 public class NominatimService {
+
     private final RestTemplate restTemplate;
 
     @Value("${demo.apis.nominatim}")
@@ -23,16 +23,23 @@ public class NominatimService {
     public Nominatim fetchLonLatFromCityAndCountry(String city, String country) {
         String url = UriComponentsBuilder.fromUriString(nominatimApiUrl)
                 .path("/search")
-                .queryParam("q", city + " " + country)
+                .queryParam("q", city + "+" + country)
                 .queryParam("format", "json")
                 .toUriString();
 
-        ResponseEntity<@NonNull Nominatim> response = restTemplate.exchange(
+        ResponseEntity<Nominatim[]> response = restTemplate.exchange(
                 url,
                 HttpMethod.GET,
                 null,
-                Nominatim.class
+                Nominatim[].class
         );
-        return response.getBody();
+
+        Nominatim[] results = response.getBody();
+        if (results == null || results.length == 0) {
+            log.warn("Aucun résultat trouvé pour {} {}", city, country);
+            return new Nominatim();
+        }
+
+        return results[0];
     }
 }

@@ -12,7 +12,4 @@ public class Nominatim {
 
     @JsonProperty("lon")
     private String lon;
-
-    @JsonProperty("name")
-    private String name;
 }
