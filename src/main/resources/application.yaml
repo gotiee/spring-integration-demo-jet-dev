@@ -5,3 +5,4 @@ spring:
 demo:
   apis:
     nominatim: https://nominatim.openstreetmap.org/
+    restcountries: https://restcountries.com/v3.1/
