@@ -33,6 +33,7 @@ public class EnrichCountryFlow {
                 .log(m -> "Enriched user with country: " + m.getPayload())
                 .publishSubscribeChannel(Executors.newCachedThreadPool(), s -> s
                         .subscribe(f -> f.channel("nominatim"))
+                        .subscribe(f -> f.channel("restCountries"))
                 )
                 .get();
     }
