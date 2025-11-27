@@ -2,9 +2,6 @@ spring:
   application:
     name: integration
 
-  integration:
-    poller:
-      fixed-delay: 1000
-      max-messages-per-poll: 10
-    error:
-      require-explicit-reply: false
+demo:
+  apis:
+    nominatim: https://nominatim.openstreetmap.org/
