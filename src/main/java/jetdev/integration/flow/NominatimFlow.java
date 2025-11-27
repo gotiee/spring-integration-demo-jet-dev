@@ -21,7 +21,7 @@ public class NominatimFlow {
                         nominatimService.fetchLonLatFromCityAndCountry((String) m.get("city"), (String) m.get("country"))
                 )
                 .log(m -> "Nominatim response: " + m.getPayload())
-                .channel("nullChannel")
+                .channel("openMeteo")
                 .get();
     }
 }

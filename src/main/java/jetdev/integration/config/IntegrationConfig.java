@@ -16,7 +16,8 @@ public class IntegrationConfig {
             "transformUser",
             "enrichCountry",
             "aggregateUserAndCountry",
-            "nominatim"
+            "nominatim",
+            "openMeteo"
     );
 
     @Bean
