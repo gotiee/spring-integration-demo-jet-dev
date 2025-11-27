@@ -1,5 +1,6 @@
 package jetdev.integration.flow;
 
+import jetdev.integration.model.RestCountries;
 import jetdev.integration.service.RestCountriesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -21,8 +22,15 @@ public class RestCountriesFlow {
                 .handle(String.class, (countryName, headers) ->
                         restCountriesService.fetchCountryDataByCountryName(countryName)
                 )
+                .transform(RestCountries.class, m ->
+                        Map.of(
+                                "country_name", m.getName().getCommon(),
+                                "country_code", m.getCountryCode(),
+                                "currency", m.getCurrencies().keySet().iterator().next()
+                        )
+                )
                 .log(m -> "RestCountriesFlow received message: " + m.getPayload())
-                .channel("aggregateUserAndCountry")
+                .channel("aggregateWeatherCountry")
                 .get();
     }
 }
