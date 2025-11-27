@@ -21,6 +21,7 @@ public class CsvFileIntegrationFlow {
                                 .patternFilter("*.csv"),
                         c -> c.poller(Pollers.fixedDelay(1000).maxMessagesPerPoll(1))
                 )
+                .split(Files.splitter())
                 .handle(m -> log.info("Processing file line: {}", m.getPayload()))
                 .get();
 
