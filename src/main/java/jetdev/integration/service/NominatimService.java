@@ -23,7 +23,7 @@ public class NominatimService {
     public Nominatim fetchLonLatFromCityAndCountry(String city, String country) {
         String url = UriComponentsBuilder.fromUriString(nominatimApiUrl)
                 .path("/search")
-                .queryParam("q", city + "+" + country)
+                .queryParam("q", city.replace(' ', '+') + "+" + country.replace(' ', '+'))
                 .queryParam("format", "json")
                 .toUriString();
 

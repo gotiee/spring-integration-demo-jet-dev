@@ -1,6 +1,5 @@
 package jetdev.integration.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jetdev.integration.model.User;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.Serializer;
@@ -11,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +35,6 @@ public class KafkaProducerConfig {
         return new KafkaTemplate<>(userProducerFactory());
     }
 
-    // Serializer personnalisé pour User
     public static class JsonUserSerializer implements Serializer<User> {
         private final ObjectMapper objectMapper = new ObjectMapper();
 

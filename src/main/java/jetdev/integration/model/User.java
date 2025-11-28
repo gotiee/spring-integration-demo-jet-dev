@@ -15,4 +15,5 @@ public class User {
     private Double temperature;
     private Double humidity;
     private String city;
+    private Boolean isIceNeeded;
 }

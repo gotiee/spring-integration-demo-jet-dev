@@ -41,6 +41,14 @@ public class AggregateUserAndCountryFlow {
                 )
                 .log(m -> "Aggregated data: " + m.getPayload())
                 .handle(Map.class, (payload, headers) -> {
+                    if((Double) payload.get("temperature") > 10)
+                        payload.put("isIceNeeded", true);
+                     else
+                        payload.put("isIceNeeded", false);
+
+                    return payload;
+                })
+                .handle(Map.class, (payload, headers) -> {
                     String correlationId = (String) headers.get("correlationId");
                     if (correlationId == null) {
                         throw new IllegalArgumentException("correlationId is required");
@@ -55,6 +63,7 @@ public class AggregateUserAndCountryFlow {
                             .temperature(Double.parseDouble(payload.get("temperature").toString()))
                             .humidity(Double.parseDouble(payload.get("humidity").toString()))
                             .city(payload.get("city").toString())
+                            .isIceNeeded((Boolean) payload.get("isIceNeeded"))
                             .build();
                     log.info("Sending to Kafka topic {} for correlationId: {}", OUTPUT_TOPIC, correlationId);
                     messageProducer.sendMessage(OUTPUT_TOPIC, user);
