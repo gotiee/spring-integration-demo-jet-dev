@@ -41,14 +41,6 @@ public class AggregateUserAndCountryFlow {
                 )
                 .log(m -> "Aggregated data: " + m.getPayload())
                 .handle(Map.class, (payload, headers) -> {
-                    if((Double) payload.get("temperature") > 10)
-                        payload.put("isIceNeeded", true);
-                     else
-                        payload.put("isIceNeeded", false);
-
-                    return payload;
-                })
-                .handle(Map.class, (payload, headers) -> {
                     String correlationId = (String) headers.get("correlationId");
                     if (correlationId == null) {
                         throw new IllegalArgumentException("correlationId is required");

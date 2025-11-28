@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.dsl.IntegrationFlow;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
@@ -21,12 +22,21 @@ public class OpenMeteoFlow {
                 .handle(Map.class, (m, headers) ->
                         openMeteoService.fetchTemperatureAndHumidityByLongAndLat((String) m.get("lon"), (String) m.get("lat"))
                 )
-                .transform(OpenMeteo.class, m ->
-                        Map.<String, Object>of(
-                                "temperature", m.getHourly().getTemperature().getLast(),
-                                "humidity", m.getHourly().getHumidity().getLast()
-                        )
+                .transform(OpenMeteo.class, m -> {
+                            Map<String, Object> result = new HashMap<>();
+                            result.put("temperature", m.getHourly().getTemperature().getLast());
+                            result.put("humidity", m.getHourly().getHumidity().getLast());
+                            return result;
+                        }
                 )
+                .log(m -> "OpenMeteo response: " + m.getPayload())
+                .handle(Map.class, (payload, headers) -> {
+                    if((Double) payload.get("temperature") > 10)
+                        payload.put("isIceNeeded", true);
+                    else
+                        payload.put("isIceNeeded", false);
+                    return payload;
+                })
                 .log(m -> "OpenMeteoFlow received message: " + m.getPayload())
                 .channel("aggregateWeatherCountry")
                 .get();

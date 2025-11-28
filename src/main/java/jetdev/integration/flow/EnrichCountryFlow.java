@@ -34,20 +34,8 @@ public class EnrichCountryFlow {
                 .publishSubscribeChannel(Executors.newCachedThreadPool(), s -> s
                         .subscribe(f -> f.channel("nominatim"))
                         .subscribe(f -> f.channel("restCountries"))
-                        .subscribe(f -> f.gateway(transferCityFlow()))
+//                        .subscribe(f -> f.gateway(transferCityFlow()))
                 )
                 .get();
-    }
-
-    @Bean
-    public IntegrationFlow transferCityFlow() {
-        return f -> f
-                .transform(Map.class, userMap -> {
-                    Map<String, String> cityMap = new HashMap<>();
-                    cityMap.put("city", (String) userMap.get("city"));
-                    return cityMap;
-                })
-                .log(m -> "Transferring city data: " + m.getPayload())
-                .channel("aggregateWeatherCountry");
     }
 }
